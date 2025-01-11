@@ -3,6 +3,8 @@
 import type { Metadata } from "next";
 import {  Poppins } from "next/font/google";
 import "./globals.css";
+import Provider from "@/context/Provider";
+// import '../../utils/bigint.ts'; 
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,11 +26,13 @@ export default function RootLayout({
   return (
     
     <html lang="en">
+      <Provider >
       <body
         className={`${poppins.variable} ${poppins.variable} antialiased`}
       >
         {children}
       </body>
+      </Provider>
     </html>
   );
 }

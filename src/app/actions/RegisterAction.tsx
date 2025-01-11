@@ -26,7 +26,7 @@ export async function create(state:unknown, formData: FormData) {
     }
     const data = parsed.data
     // try {
-        console.log(process.env.VITE_API as string)
+        // console.log(process.env.VITE_API as string)
         const res = await axios.post(process.env.VITE_API as string, {
             ...data, 
             completed: false

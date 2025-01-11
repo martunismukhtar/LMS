@@ -1,15 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
-type roleType = {
-    id: number;
-    name: string;
-}
-type permissionsType = {
-    id: number;
-    name: string;
-}
+import prisma from "./prisma";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -22,25 +16,74 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {                 
-                const res = await axios.post(`${process.env.VITE_API}auth`, {
-                    email: credentials?.email,
-                    password: credentials?.password
-                })
-                .then(res=>res.data)
+                // const { email, password } = credentials || {};
+                const user = await prisma.user.findFirst({
+                    where: {
+                        email: credentials?.email,
+                    },
+                }).then(res=>res)
                 .catch(err=>err.message);
-                
-                console.log(res)        
-                const user = {
-                    id: res.user.id,
-                    name: res.user.username,
-                    email: res.user.email,
-                    role: res.user.role,
-                    permissions: res.user.permissions,
-                    token: res.token, // Pastikan token disertakan
-                };
-                console.log(user)
-                return user;
-                             
+            
+                if(!user) {
+                    throw new Error("User not found")
+                }
+                const isValidPassword = await bcrypt.compare(
+                    credentials?.password || '',
+                    user.password
+                );
+                if (!isValidPassword) {
+                    throw new Error('Invalid email or password');
+                }
+                const token = jwt.sign(
+                    { id: user.id, email: user.email }, 
+                    process.env.SECRET_KEY as string, 
+                    { expiresIn: '1h' }
+                );
+                const user_role = await prisma.userRole.findFirst({
+                    where: {
+                        user_id: user.id,
+                    },
+                })
+                const roles = await prisma.roles.findFirst({
+                    select: {
+                      id: true,
+                      name: true 
+                    },
+                    where: {
+                        id: user_role?.role_id,
+                    },
+                })
+                // console.log(roles);
+                const refreshToken = jwt.sign({ 
+                    id: user.id, email: user.email 
+                  }, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '7d' });
+
+                const userAuth = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: roles?.name,
+                    accessToken: token,
+                    refreshToken: refreshToken
+                }
+                console.log(userAuth);
+                return userAuth;
+                // const res = await axios.post(`${process.env.VITE_API}auth`, {
+                //     email: credentials?.email,
+                //     password: credentials?.password
+                // })
+                // .then(res=>res.data)
+                // .catch(err=>err.message);
+                  
+                // const user = {
+                //     id: res.user.id,
+                //     name: res.user.username,
+                //     email: res.user.email,
+                //     role: res.user.role,
+                //     permissions: res.user.permissions,
+                //     accessToken: res.accessToken, // Pastikan token disertakan
+                // };                
+                // return user;
             },
         }),
     ],
@@ -50,16 +93,18 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         jwt({ token, user }) {
           if (!user) return token
-            token.role = user.role;
-            token.permissions = user.permissions;
+            // token.role = user.role;
+            token.refreshToken = user.refreshToken;
+            token.accessToken = user.accessToken;
           return {
             ...token,
             id: user.id,
           }
         },
         session({ session, token }) {
-            session.role = token.role as roleType;
-            session.permissions = token.permissions as permissionsType[];
+            session.role = token.role as string;
+            session.accessToken = token.accessToken as string;
+            session.refreshToken = token.refreshToken as string;
           return {
             ...session,
             id: token.id,

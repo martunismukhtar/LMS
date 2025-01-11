@@ -1,5 +1,4 @@
 
-
 import LandingPage from "./landing/page";
 import Layout from "./layouts/landing";
 

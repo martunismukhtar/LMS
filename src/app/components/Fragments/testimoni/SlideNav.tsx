@@ -33,10 +33,10 @@ const SlideNav = () => {
   }, [currentIndex]);
 
   return (
-    <div className="w-full sm:w-1/2 relative h-[400px]">
-      <div className="bg-[#235af3] w-7/12 h-full rounded-r-xl rounded-l-full absolute right-0 overflow-hidden"></div>
-      <div className="bg-transparent w-full sm:w-9/12 h-full absolute left-0 overflow-hidden flex items-center justify-center">
-        <div className="relative w-full overflow-hidden">
+    <div className="w-full lg:w-1/2 relative p-48">
+      <div className="bg-[#235af3] w-7/12 h-full rounded-r-xl rounded-l-full absolute top-0 right-0 overflow-hidden"></div>
+      <div className="bg-transparent w-full sm:w-9/12 h-full absolute top-0 left-0 overflow-hidden flex flex-col items-center justify-between">
+        <div className="relative w-full overflow-hidden mt-8">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
@@ -67,8 +67,9 @@ const SlideNav = () => {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex justify-center mt-4 space-x-2">
+          </div>          
+        </div>
+        <div className="flex mt-4 space-x-2">
             {slides.map((_, index) => (
               <button
                 key={index}
@@ -79,7 +80,6 @@ const SlideNav = () => {
               ></button>
             ))}
           </div>
-        </div>
       </div>
     </div>
   );
