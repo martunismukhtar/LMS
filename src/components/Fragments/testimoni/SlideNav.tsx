@@ -3,26 +3,27 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+const slides = [
+  {
+    id: 1,
+    text: "“As someone who looked around for months before deciding to go with EduForge, I can say with confidence – if you’re trying to make a course to sell your expertise, EduForge provides the structure, and so much more.”",
+  },
+  {
+    id: 2,
+    text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
+  },
+  {
+    id: 3,
+    text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
+  },
+  {
+    id: 4,
+    text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
+  },
+];
+
 const SlideNav = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slides = [
-    {
-      id: 1,
-      text: "“As someone who looked around for months before deciding to go with EduForge, I can say with confidence – if you’re trying to make a course to sell your expertise, EduForge provides the structure, and so much more.”",
-    },
-    {
-      id: 2,
-      text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
-    },
-    {
-      id: 3,
-      text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
-    },
-    {
-      id: 4,
-      text: "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.”",
-    },
-  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -30,12 +31,20 @@ const SlideNav = () => {
     }, 6000);
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, []);
+
+  const handleDotClick = (index: number) => {
+    setCurrentIndex(index);
+  };
 
   return (
-    <div className="w-full lg:w-1/2 relative p-48">
+    <div className="w-full lg:w-1/2 relative p-12 lg:p-48">
+      {/* Background */}
       <div className="bg-[#235af3] w-7/12 h-full rounded-r-xl rounded-l-full absolute top-0 right-0 overflow-hidden"></div>
+
+      {/* Slider Content */}
       <div className="bg-transparent w-full sm:w-9/12 h-full absolute top-0 left-0 overflow-hidden flex flex-col items-center justify-between">
+        {/* Slides */}
         <div className="relative w-full overflow-hidden mt-8">
           <div
             className="flex transition-transform duration-500 ease-in-out"
@@ -51,12 +60,11 @@ const SlideNav = () => {
                     <div className="flex items-center justify-center gap-4">
                       <Image
                         src="/Group-2365.svg"
-                        alt="User avatar"
+                        alt="User avatar illustration"
                         className="w-12 h-12"
                         width={150}
                         height={150}
                       />
-
                       <p>
                         <strong>Adam Barragato</strong>
                         <br />
@@ -67,21 +75,25 @@ const SlideNav = () => {
                 </div>
               </div>
             ))}
-          </div>          
-        </div>
-        <div className="flex mt-4 space-x-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-5 h-5 rounded-full ${
-                  index === currentIndex ? "bg-[#235af3]" : "bg-gray-300"
-                }`}
-              ></button>
-            ))}
           </div>
+        </div>
+
+        {/* Navigation Dots */}
+        <div className="flex mt-4 space-x-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              className={`w-5 h-5 rounded-full ${
+                index === currentIndex ? "bg-[#235af3]" : "bg-gray-300"
+              }`}
+            ></button>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
+
 export default SlideNav;

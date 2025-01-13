@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Layout from "../layouts/landing";
-import Table from "@/components/Elements/table";
-import Swal from "@/components/Elements/Swal";
-// import CourseView from "./view";
 
+import Table from "../components/Elements/table";
+import Swal from "../components/Elements/Swal";
 
 type Course = {
   id: string;
@@ -16,25 +14,22 @@ type Course = {
   duration: string;
 };
 
-const Courses = () => {
-  const [courses, setData] = useState<Course[]>([]);
-  const [header] = useState<string[]>([
-    "id",
-    "title",
-    "description",
-    "status",
-    "price",
-    "duration",
-  ]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+interface Props {
+  data: Course[];
+}
+
+const CourseView: React.FC<Props> = ({ data }) => {
+  const [header, setHeader] = useState<string[]>([]);
+  const [dataTbl, setData] = useState<Course[]>([]);
   const [show, setShow] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  useEffect(() => {
+    setHeader(["id", "title", "description", "status", "price", "duration"]);
+  }, []);
 
   useEffect(() => {
-    fetch("api/courses")
-      .then((res) => res.json())
-      .then((data:Course[]) => setData(data || []))
-      .catch((err) => console.error("Error fetching products:", err));
-  }, []);
+    setData(data);
+  }, [data]);
 
   const handleDelete = (id: string) => {
     setSelectedId(id);
@@ -98,14 +93,17 @@ const Courses = () => {
   ];
 
   return (
-    <Layout>      
-      <Table header={header} data={courses} buttonConfig={buttonConfig} />
+    <>
+      <Table header={header} data={dataTbl} 
+        buttonConfig={buttonConfig} 
+        />
       <Swal
         visible={show}
         onConfirm={handleConfirm}
         onCancel={() => setShow(false)}
       />
-    </Layout>
+    </>
   );
 };
-export default Courses;
+
+export default CourseView;

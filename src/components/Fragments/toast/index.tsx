@@ -3,13 +3,14 @@
 import Toast from "@/app/components/Elements/Toast/Index";
 import { returnMessageState } from "@/app/Jotai/atom";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 type StatusType = "success" | "error" | "info" | undefined;
+
 interface ToastType {
-    message: string;
-    type?: StatusType;
-    visible: boolean
+  message: string;
+  type?: StatusType;
+  visible: boolean;
 }
 
 const ToastElement = () => {
@@ -21,30 +22,31 @@ const ToastElement = () => {
     type: undefined,
   });
 
-  const showToast = ({
-    message,
-    type,
-  }: {
-    message: string;
-    type?: "success" | "error" | "info";
-  }) => {
-    setToast({ visible: true, message, type: type? type:undefined});
-    setTimeout(() => {
-      setToast({ visible: false, message: "", type: type? type:undefined });
-      setReturnMessage({ visible: false, message: "" });
-    }, 3000); // Toast akan hilang setelah 3 detik
-  };
+  const showToast = useCallback(
+    ({
+      message,
+      type,
+    }: {
+      message: string;
+      type?: "success" | "error" | "info";
+    }) => {
+      setToast({ visible: true, message, type });
+      setTimeout(() => {
+        setToast({ visible: false, message: "", type: undefined });
+        setReturnMessage({ visible: false, message: "" });
+      }, 3000); // Toast akan hilang setelah 3 detik
+    },
+    [setReturnMessage]
+  );
 
-  const handleCloseToast = () => {    
+  const handleCloseToast = useCallback(() => {
     setReturnMessage({
-        visible: false,
-        message: "",
-        // type: "",
-      });
-  };
+      visible: false,
+      message: "",
+    });
+  }, [setReturnMessage]);
 
-  useEffect(() => {    
-    console.log(`isVisibleToast : ${JSON.stringify(isVisibleToast)}`);
+  useEffect(() => {
     if (isVisibleToast.visible) {
       if (isVisibleToast.type === "error") {
         showToast({
@@ -53,22 +55,21 @@ const ToastElement = () => {
         });
       } else if (isVisibleToast.type === "success") {
         showToast({ message: `${isVisibleToast.message}`, type: "success" });
-      }       
+      }
     }
-  }, [isVisibleToast.visible]);
+  }, [isVisibleToast, showToast]);
 
   return (
     <>
-      {isVisibleToast.visible ? (
+      {isVisibleToast.visible && (
         <Toast
           message={toast.message}
-          type={toast.type ? toast.type: undefined}
+          type={toast.type}
           onClose={handleCloseToast}
         />
-      ) : (
-        ""
       )}
     </>
   );
 };
+
 export default ToastElement;

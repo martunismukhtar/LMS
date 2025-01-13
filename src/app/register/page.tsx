@@ -1,9 +1,9 @@
-import RegisterForm from "../components/Fragments/RegisterForm";
+// import RegisterForm from "../components/Fragments/RegisterForm";
 
 const Register = () => {
     return (
         <>
-            <RegisterForm />
+            {/* <RegisterForm /> */}
         </>
     );
 }

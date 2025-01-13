@@ -5,9 +5,9 @@ import ScroolTopButton from "@/app/components/Fragments/scroolTopButton";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-full relative">
+    <div className="w-full h-screen relative flex flex-col">
       <Header />
-      <div className="p-0">{children}</div>
+      <div className="p-0 flex-1">{children}</div>
       <Footer />
       <ScroolTopButton />
       <Drawer />

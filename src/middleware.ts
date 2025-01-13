@@ -3,12 +3,13 @@ import type { NextRequest } from 'next/server';
 import { getToken } from "next-auth/jwt"
 
 export async function middleware(req: NextRequest) {
-    const protectedRoutes = ['/users', '/profile']; // Daftar rute yang dilindungi
+    const protectedRoutes = ['/users', '/courses', '/profile']; // Daftar rute yang dilindungi
     // const token = req.cookies.get('token'); // Ambil token dari cookies
     //const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     const token = await getToken({ req })
     const isAuthenticated = !!token
-
+    // console.log(`dari middleware ${isAuthenticated}`)
+    // console.log(token)
     const url = req.nextUrl.clone(); // Clone URL request
 
     // console.log(token)
@@ -26,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 //'/courses/:path*', '/courses', 
 export const config = {
-    matcher: ['/users/:path*', '/profile/:path*'], // Konfigurasi rute yang dilindungi
+    matcher: ['/users/:path*', '/courses/:path*', '/profile/:path*'], // Konfigurasi rute yang dilindungi
 };

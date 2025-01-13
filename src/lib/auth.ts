@@ -53,7 +53,6 @@ export const authOptions: NextAuthOptions = {
                         id: user_role?.role_id,
                     },
                 })
-                // console.log(roles);
                 const refreshToken = jwt.sign({ 
                     id: user.id, email: user.email 
                   }, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '7d' });
@@ -66,7 +65,6 @@ export const authOptions: NextAuthOptions = {
                     accessToken: token,
                     refreshToken: refreshToken
                 }
-                console.log(userAuth);
                 return userAuth;
                 // const res = await axios.post(`${process.env.VITE_API}auth`, {
                 //     email: credentials?.email,
@@ -93,7 +91,7 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         jwt({ token, user }) {
           if (!user) return token
-            // token.role = user.role;
+            token.role = user.role;
             token.refreshToken = user.refreshToken;
             token.accessToken = user.accessToken;
           return {

@@ -9,12 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        'color-dark1':"#dee4ee",
+        'color-dark2':"#8a99af",
+        'color-dark':"#333a48",        
         background: "var(--background)",
         foreground: "var(--foreground)",
         'primary': '#007BFF',
         'secondary': '#E6E6E6',
         'tertiary': '#F8F8F8',
         'quaternary': '#F8F8F8',
+        'dark': '#333a48',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',

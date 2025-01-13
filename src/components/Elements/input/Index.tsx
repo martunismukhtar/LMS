@@ -12,7 +12,7 @@ type Props = {
 }
 
 const InputForm = (props:Props) => {
-    const {label, name, type, placeholder, required} = props
+    const {label, name, type, placeholder, required, value="", onChange} = props
   return (
     <div className="mb-6">
       <Label htmlfor={name}>
@@ -21,7 +21,9 @@ const InputForm = (props:Props) => {
       </Label>
       <Input type={type} name={name}         
         placeholder={placeholder} 
+        value={value}
         required={required}
+        onChange={onChange}
         />
     </div>
   );
