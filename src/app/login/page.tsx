@@ -2,11 +2,11 @@
 
 import { signIn } from "next-auth/react";
 import Layout from "../layouts/landing";
-import Button from "../components/Elements/button";
-import InputForm from "../components/Elements/input/Index";
 import { useState } from "react";
 import Link from "next/link";
-import LoadingButton from "../components/Elements/loading/LoadingButton";
+import Button from "@/components/Elements/button";
+import LoadingButton from "@/components/Elements/loading/LoadingButton";
+import InputForm from "@/components/Elements/input/Index";
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -55,7 +55,7 @@ const Login = () => {
             required
           />
           <div className="flex justify-end">
-            {loading ? <LoadingButton /> : <Button type="submit">Login</Button> }            
+            {loading ? <LoadingButton /> : <Button className="btn-default" type="submit">Login</Button> }            
           </div>          
           <p className="mt-4">
           You do not have an account yet? 

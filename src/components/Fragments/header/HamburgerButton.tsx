@@ -1,6 +1,6 @@
 "use client";
 
-import { isOpenMenuState } from "@/app/Jotai/atom";
+import { isOpenMenuState } from "@/Jotai/atom";
 import { useAtom } from "jotai";
 
 const HamburgerButton = () => {

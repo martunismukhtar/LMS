@@ -8,69 +8,140 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  name      String
-  email     String     @unique
-  password  String
-  google_id String?    // Nullable
-  createdAt DateTime   @default(now())  
-  role      UserRole[]
+  id            String           @id @default(uuid())
+  name          String
+  email         String           @unique
+  password      String
+  google_id     String? // Nullable
+  createdAt     DateTime         @default(now())
+  role          UserRole[]
+  subscriptions Subscriptions[]
+  progress      LessonProgress[]
+  usercourse UserCourse[]
   @@map("users")
 }
 
 model Categories {
-  id          Int       @id @default(autoincrement())
+  id            String          @id @default(uuid())
   name        String
   description String
-  courses Courses[]
+  courses     Courses[]
   createdAt   DateTime  @default(now()) // Gunakan @default untuk createdAt
-  updatedAt   DateTime? @updatedAt       // Gunakan @updatedAt untuk updatedAt
+  updatedAt   DateTime? @updatedAt // Gunakan @updatedAt untuk updatedAt
+
   @@map("categories")
 }
 
 model Courses {
-  id          Int         @id @default(autoincrement())
-  title       String
-  description String
-  status      CourseStatus @default(draft)
-  price       Decimal     @db.Decimal(10, 2) @default(0)
-  duration    Int
-  category_id Int
-  category    Categories   @relation(fields: [category_id], references: [id])
-  createdAt   DateTime    @default(now())  // Gunakan @default untuk createdAt
-  updatedAt   DateTime?   @updatedAt       // Gunakan @updatedAt untuk updatedAt
+  id            String          @id @default(uuid())
+  title         String
+  description   String
+  status        CourseStatus    @default(draft)
+  price         Decimal         @default(0) @db.Decimal(10, 2)
+  duration      Int
+  category_id   String
+  category      Categories      @relation(fields: [category_id], references: [id])
+  module        Modules[]
+  subscriptions Subscriptions[]
+  usercourse UserCourse[]
+  createdAt     DateTime        @default(now()) // Gunakan @default untuk createdAt
+  updatedAt     DateTime?       @updatedAt // Gunakan @updatedAt untuk updatedAt
+
   @@map("courses")
 }
 
+model UserCourse {
+  id String @id @default(uuid())
+  course_id String
+  course    Courses   @relation(fields: [course_id], references: [id])
+  user_id String
+  user User  @relation(fields: [user_id], references: [id])
+  @@map("user_course")
+}
+
+model Modules {
+  id        String    @id @default(uuid())
+  title     String
+  course_id String
+  course    Courses   @relation(fields: [course_id], references: [id])
+  lesson    Lessons[]
+
+  @@map("modules")
+}
+
+model Lessons {
+  id           String           @id @default(uuid())
+  module_id    String
+  module       Modules          @relation(fields: [module_id], references: [id])
+  title        String
+  description  String?
+  content      String?          @db.Text
+  video_url    String?
+  duration     Int              @default(0)
+  is_published Boolean          @default(false)
+  is_free      Boolean          @default(true)
+  progress     LessonProgress[]
+  created_at   DateTime         @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at   DateTime?        @updatedAt
+
+  @@map("lessons")
+}
+
+model Subscriptions {
+  id                String         @id @default(cuid())
+  user_id           String
+  user              User           @relation(fields: [user_id], references: [id])
+  course_id         String
+  course            Courses        @relation(fields: [course_id], references: [id])
+  subscription_type CourseDuration
+  start_date        DateTime
+  validUntil        DateTime
+  createdAt         DateTime       @default(now())
+
+  @@map("subscriptions")
+}
+
+model LessonProgress {
+  id          String    @id @default(cuid())
+  user_id     String
+  user        User      @relation(fields: [user_id], references: [id])
+  lesson_id   String
+  lesson      Lessons   @relation(fields: [lesson_id], references: [id])
+  completed   Boolean   @default(false)
+  completed_at DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@map("lesson_progress")
+}
+
 model Roles {
-  id          Int         @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
   description String
   role        UserRole[]
+
   @@map("roles")
 }
 
 model UserRole {
-  user   User   @relation(fields: [user_id], references: [id])
-  user_id Int
-  role   Roles  @relation(fields: [role_id], references: [id])
+  id          String    @id @default(cuid())
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+  role    Roles  @relation(fields: [role_id], references: [id])
   role_id Int
 
-  @@id([user_id, role_id])
   @@map("user_roles")
 }
-
-// model CourseCategories {
-//   courseId   Int        // Referensi ke course
-//   categoryId Int        // Referensi ke category
-//   course     Courses    @relation(fields: [courseId], references: [id])
-//   category   Categories @relation(fields: [categoryId], references: [id])
-
-//   @@id([courseId, categoryId]) // Kombinasi primary key
-//   @@map("course_category")
-// }
 
 enum CourseStatus {
   draft
   publish
+}
+
+enum CourseDuration {
+  ONE_MONTH
+  THREE_MONTHS
+  SIX_MONTHS
+  TWELVE_MONTHS
+  LIFETIME
 }

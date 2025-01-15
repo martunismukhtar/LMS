@@ -1,9 +1,9 @@
 
 'use client';
 
+import { jenisFormState } from "@/Jotai/atom";
 import { useAtom } from "jotai";
 import React from "react";
-import { jenisFormState } from "@/app/Jotai/atom";
 
 type Props = {
   title: string;

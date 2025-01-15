@@ -1,7 +1,7 @@
 "use client";
 
-import Toast from "@/app/components/Elements/Toast/Index";
-import { returnMessageState } from "@/app/Jotai/atom";
+import Toast from "@/components/Elements/Toast/Index";
+import { returnMessageState } from "@/Jotai/atom";
 import { useAtom } from "jotai";
 import { useEffect, useState, useCallback } from "react";
 

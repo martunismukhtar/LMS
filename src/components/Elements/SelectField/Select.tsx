@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Select = (props: Props) => {
-  const { options, placeholder="-- Pilih --", 
+  const { options, placeholder,
       onChange, 
       required=false, 
       name, 

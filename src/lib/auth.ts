@@ -1,13 +1,13 @@
-// import axios from "axios";
+
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "./prisma";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
+        maxAge: 1 * 24 * 60 * 60
     },
     providers: [
         Credentials({            
@@ -34,11 +34,11 @@ export const authOptions: NextAuthOptions = {
                 if (!isValidPassword) {
                     throw new Error('Invalid email or password');
                 }
-                const token = jwt.sign(
-                    { id: user.id, email: user.email }, 
-                    process.env.SECRET_KEY as string, 
-                    { expiresIn: '1h' }
-                );
+                // const token = jwt.sign(
+                //     { id: user.id, email: user.email }, 
+                //     process.env.SECRET_KEY as string, 
+                //     { expiresIn: '1h' }
+                // );
                 const user_role = await prisma.userRole.findFirst({
                     where: {
                         user_id: user.id,
@@ -53,17 +53,17 @@ export const authOptions: NextAuthOptions = {
                         id: user_role?.role_id,
                     },
                 })
-                const refreshToken = jwt.sign({ 
-                    id: user.id, email: user.email 
-                  }, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '7d' });
+                // const refreshToken = jwt.sign({ 
+                //     id: user.id, email: user.email 
+                //   }, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '7d' });
 
                 const userAuth = {
                     id: user.id,
                     name: user.name,
                     email: user.email,
                     role: roles?.name,
-                    accessToken: token,
-                    refreshToken: refreshToken
+                    // accessToken: token,
+                    // refreshToken: refreshToken
                 }
                 return userAuth;
                 // const res = await axios.post(`${process.env.VITE_API}auth`, {
@@ -92,8 +92,8 @@ export const authOptions: NextAuthOptions = {
         jwt({ token, user }) {
           if (!user) return token
             token.role = user.role;
-            token.refreshToken = user.refreshToken;
-            token.accessToken = user.accessToken;
+            // token.refreshToken = user.refreshToken;
+            // token.accessToken = user.accessToken;
           return {
             ...token,
             id: user.id,
@@ -101,8 +101,8 @@ export const authOptions: NextAuthOptions = {
         },
         session({ session, token }) {
             session.role = token.role as string;
-            session.accessToken = token.accessToken as string;
-            session.refreshToken = token.refreshToken as string;
+            // session.accessToken = token.accessToken as string;
+            // session.refreshToken = token.refreshToken as string;
           return {
             ...session,
             id: token.id,

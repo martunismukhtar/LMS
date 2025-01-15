@@ -1,7 +1,8 @@
-import Drawer from "@/app/components/Fragments/drawer";
-import Footer from "@/app/components/Fragments/footer";
-import Header from "@/app/components/Fragments/header/header";
-import ScroolTopButton from "@/app/components/Fragments/scroolTopButton";
+import Drawer from "@/components/Fragments/drawer";
+import Footer from "@/components/Fragments/footer";
+import Header from "@/components/Fragments/header/header";
+import ScroolTopButton from "@/components/Fragments/scroolTopButton";
+
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (

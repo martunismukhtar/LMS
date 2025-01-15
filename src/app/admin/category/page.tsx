@@ -1,13 +1,14 @@
 "use client";
 
 import AdminLayout from "@/app/layouts/admin";
+import ShimmerLoading from "@/components/Elements/loading/ShimmerLoading";
 import Swal from "@/components/Elements/Swal";
 import Table from "@/components/Elements/table";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Category {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }
@@ -94,7 +95,7 @@ const CategoryPage = () => {
         </Link>
       </div>
       <div className="mt-6 bg-white p-4 rounded-md">
-        <Table header={header} data={tableData} buttonConfig={buttonConfig} />
+      {data.length > 0 ? <Table header={header} data={tableData} buttonConfig={buttonConfig} /> : <ShimmerLoading />} 
         <Swal
           visible={show}
           onConfirm={handleConfirm}

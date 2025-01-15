@@ -2,9 +2,10 @@
 
 import Image from 'next/image'
 import Aside from "./Aside";
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import ToastElement from '@/components/Fragments/toast';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     const { data: session } = useSession()
@@ -34,6 +35,11 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                                             Account Setting
                                             </Link>                                            
                                         </li>
+                                        <li>
+                                            <button onClick={() => signOut()} className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base'>
+                                            Logout
+                                            </button>                                            
+                                        </li>
                                     </ul>
                                 </div>
                                 
@@ -45,7 +51,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                 <div className='max-w-screen-2xl p-4 md:p-6 2xl:p-10'>
                 {children}
                 </div>                
-            </div>            
+            </div>      
+            <ToastElement />      
         </div>
     );
 };

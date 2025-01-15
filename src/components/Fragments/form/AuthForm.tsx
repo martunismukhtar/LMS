@@ -1,9 +1,9 @@
 'use client';
 
-import { jenisFormState } from "@/app/Jotai/atom";
 import { useAtom } from "jotai";
 import Modal from "../../Elements/modal";
 import LoginForm from "../LoginForm";
+import { jenisFormState } from "@/Jotai/atom";
 // import RegisterForm from "../RegisterForm";
 
 const AuthForm = () => {

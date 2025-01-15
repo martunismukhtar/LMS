@@ -9,13 +9,13 @@ type Props = {
 const Button = (props: Props) => {
   const {
     children = "...",
-    className = "border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white",
+    className = "",
     type = "button",
     onClick = () => {},
   } = props;
   return (
     <button
-      className={`${className} px-4 py-2 rounded`}
+      className={`${className}`}
       type={`${type}`}
       onClick={onClick}
     >

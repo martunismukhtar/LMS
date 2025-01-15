@@ -1,9 +1,10 @@
+import Button from "@/components/Elements/button";
+import About from "@/components/Fragments/about/about";
+import AuthForm from "@/components/Fragments/form/AuthForm";
+import Testimoni from "@/components/Fragments/testimoni/testimoni";
+import ToastElement from "@/components/Fragments/toast";
 import Image from "next/image";
-import Button from "../components/Elements/button";
-import Testimoni from "../components/Fragments/testimoni/testimoni";
-import About from "../components/Fragments/about/about";
-import AuthForm from "../components/Fragments/form/AuthForm";
-import ToastElement from "../components/Fragments/toast";
+
 
 const LandingPage = () => {
   

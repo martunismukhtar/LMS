@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
@@ -13,7 +12,12 @@ export async function GET() {
       description: true,
       status: true,
       price: true,
-      duration: true
+      duration: true,
+      category:{
+        select: {          
+          name: true
+        }
+      }
     }
   });
 
@@ -60,33 +64,21 @@ export async function GET() {
 
 // Handle POST request: Add a new user
 export async function POST(req: Request) {
-  const { title, description, status, price, duration } = await req.json();
-  const schema = z.object({
-    title: z.string(),
-    description: z.string(),
-    status: z.string(),
-    price: z.number(),
-    duration: z.number()
-  });
-  const parsed = schema.safeParse({
-    title: title,
-    description: description,
-    status: status,
-    price: price,
-    duration: duration
-  });
-
-  if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.errors[0].message }, { status: 400 });
+  const { title, description, status, price, duration, category_id } = await req.json();
+ try {
+    const newCourse = await prisma.courses.create({
+      data: { 
+        title, 
+        description, 
+        status, 
+        price: Number(price), 
+        duration:Number(duration), 
+        category_id: Number(category_id)
+      },
+    });
+    return NextResponse.json(newCourse);
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 500 });
   }
-
-  const newCourse = await prisma.courses.create({
-    data: { title, description, status, price, duration },
-  });
-
-  if (!newCourse) {
-    return NextResponse.json({ error: 'Failed to create course' }, { status: 500 });
-  }
-
-  return NextResponse.json(newCourse);
+  
 }

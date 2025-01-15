@@ -4,7 +4,7 @@ import Image from "next/image";
 import Landingmenu from "../Landingmenu";
 import Link from "next/link";
 import { useAtom } from "jotai";
-import { isOpenMenuState } from "@/app/Jotai/atom";
+import { isOpenMenuState } from "@/Jotai/atom";
 
 const Drawer = () => {
     const [isOpenMenu, setOpenMenu] = useAtom(isOpenMenuState);

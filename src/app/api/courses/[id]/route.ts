@@ -21,12 +21,12 @@ export async function GET(
       status: true,
       price: true,
       duration: true,
+      category_id: true
     },
     where: {
       id: Number(id),
     },
   });
-
   return NextResponse.json(courses);
 }
 
@@ -40,7 +40,7 @@ export async function PUT(
     return NextResponse.json({ message: "ID is required" }, { status: 400 });
   }
 
-  const { title, description, status, price, duration } = await request.json();
+  const { title, description, status, price, duration, category_id } = await request.json();
 
   const course = await prisma.courses.findUnique({
     where: { id: Number(id) },
@@ -57,8 +57,9 @@ export async function PUT(
         title,
         description,
         status,
-        price,
+        price: Number(price),
         duration: Number(duration),
+        category_id: Number(category_id)
       },
     });
   } catch (error) {

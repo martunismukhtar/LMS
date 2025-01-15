@@ -1,84 +1,85 @@
 "use server";
 import { z } from "zod";
-// import axios from 'axios';
 
 export async function create(state: unknown, formData: FormData) {
-  const schema = z.object({
-    id: z.number(),
-    title: z.string(),
-    description: z.string(),
-    status: z.string(),
+  const schema = z.object({    
+    title: z.string({message: "Title is required"}).min(3, { message: "Title must be at least 3 characters" }),
+    description: z.string({message: "Description is required"}).min(3, { message: "Description must be at least 3 characters" }),
+    status: z.string({message: "Status is required"}).min(3, { message: "Status must be at least 3 characters" }),
     price: z.number(),
     duration: z.number(),
+    category_id: z.number(),
   });
-  const parsed = schema.safeParse({
-    id: formData.get("id"),
+  const parsed = schema.safeParse({    
     title: formData.get("title"),
     description: formData.get("description"),
     status: formData.get("status"),
-    price: formData.get("price"),
-    duration: formData.get("duration"),
+    price: Number(formData.get("price")),
+    duration: Number(formData.get("duration")),
+    category_id: Number(formData.get("category_id")),
   });
-
-  if (!parsed.success) {
+  
+  if (!parsed.success) {  
     return {
-      message: parsed.error.errors[0].message,
+      message: String(parsed.error.errors[0].message),
       status: "error",
     };
+  }  
+  
+  try {
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/courses/` as string,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: formData.get("title"),
+            description: formData.get("description"),
+            status: formData.get("status"),
+            price: formData.get("price"),
+            duration: formData.get("duration"),
+            category_id: formData.get("category_id")
+          }),
+        }
+      );
+      console.log(res.status);
+      if (res.status !== 200) {        
+        return {
+          message: res.statusText,
+          status: "error",
+        };
+      }
+      return {
+        message: "Category updated successfully",
+        status: "success",
+      };
   }
-  const data = parsed.data;
-  console.log(data);
-  return data;
-  // const res = await fetch(`/api/courses/${data.id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  // }, {
-  //     data
-  // }).then(res=>res.data)
-  // .catch(err=>{
-  //     return err.message
-  // })
-  const res = await fetch(`/api/courses/${data.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  console.log(res);
-  if (res.status !== 200) {
-    return {
-      message: res,
-      status: "error",
-    };
+  catch (error) {
+      return {
+          message: error,
+          status: "error",
+      };
   }
-  // console.log(res)
-  return res;
 }
 
 export async function edit(state: unknown, formData: FormData) {  
-  const schema = z.object({
-    id: z.string(),
-    title: z.string({
-      required_error: "Title is required",
-      invalid_type_error: "Title must be a string",      
-    }).min(3, { message: "Title must be at least 3 characters" }),
-    description: z.string(),
-    status: z.string(),
-    price: z.string(),
-    duration: z.number().int({ message: "Duration must be a number" })
-      .min(1, { message: "Duration must be at least 1" }),
+  const schema = z.object({    
+    title: z.string({message: "Title is required"}).min(3, { message: "Title must be at least 3 characters" }),
+    description: z.string({message: "Description is required"}).min(3, { message: "Description must be at least 3 characters" }),
+    status: z.string({message: "Status is required"}).min(3, { message: "Status must be at least 3 characters" }),
+    price: z.number(),
+    duration: z.number(),
+    category_id: z.number(),
   });
-  const validatedData = schema.safeParse({
-    id: formData.get("id"),
+  const validatedData = schema.safeParse({    
     title: formData.get("title"),
     description: formData.get("description"),
     status: formData.get("status"),
-    price: formData.get("price"),
+    price: Number(formData.get("price")),
     duration: Number(formData.get("duration")),
+    category_id: Number(formData.get("category_id")),
   });
   if (!validatedData.success) {
     console.log(validatedData.error.errors[0].message);
@@ -102,13 +103,14 @@ export async function edit(state: unknown, formData: FormData) {
             status: formData.get("status"),
             price: formData.get("price"),
             duration: formData.get("duration"),
+            category_id: formData.get("category_id")
           }),
         }
       );
     
       if (res.status !== 200) {
         return {
-          message: res,
+          message: res.statusText,
           status: "error",
         };
       }
