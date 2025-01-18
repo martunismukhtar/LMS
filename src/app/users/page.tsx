@@ -1,4 +1,5 @@
-import Button from "../components/views/button";
+
+import Button from "@/components/Elements/button";
 import Layout from "../layouts/landing";
 // import { useSession } from "next-auth/react";
 

@@ -8,7 +8,7 @@ export async function create(state: unknown, formData: FormData) {
     status: z.string({message: "Status is required"}).min(3, { message: "Status must be at least 3 characters" }),
     price: z.number(),
     duration: z.number(),
-    category_id: z.number(),
+    category_id: z.string(),
   });
   const parsed = schema.safeParse({    
     title: formData.get("title"),
@@ -16,7 +16,7 @@ export async function create(state: unknown, formData: FormData) {
     status: formData.get("status"),
     price: Number(formData.get("price")),
     duration: Number(formData.get("duration")),
-    category_id: Number(formData.get("category_id")),
+    category_id: formData.get("category_id"),
   });
   
   if (!parsed.success) {  
@@ -44,7 +44,7 @@ export async function create(state: unknown, formData: FormData) {
           }),
         }
       );
-      console.log(res.status);
+
       if (res.status !== 200) {        
         return {
           message: res.statusText,
@@ -52,7 +52,7 @@ export async function create(state: unknown, formData: FormData) {
         };
       }
       return {
-        message: "Category updated successfully",
+        message: "Course added successfully",
         status: "success",
       };
   }
@@ -71,7 +71,7 @@ export async function edit(state: unknown, formData: FormData) {
     status: z.string({message: "Status is required"}).min(3, { message: "Status must be at least 3 characters" }),
     price: z.number(),
     duration: z.number(),
-    category_id: z.number(),
+    category_id: z.string(),
   });
   const validatedData = schema.safeParse({    
     title: formData.get("title"),
@@ -79,7 +79,7 @@ export async function edit(state: unknown, formData: FormData) {
     status: formData.get("status"),
     price: Number(formData.get("price")),
     duration: Number(formData.get("duration")),
-    category_id: Number(formData.get("category_id")),
+    category_id: formData.get("category_id"),
   });
   if (!validatedData.success) {
     console.log(validatedData.error.errors[0].message);

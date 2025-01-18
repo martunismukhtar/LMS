@@ -130,6 +130,16 @@ const Aside = () => {
                 >
                   <li>
                     <Link
+                      href="/admin/role"
+                      className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-color-dark2 duration-300 ease-in-out hover:text-white ${
+                        selected?.includes("role") ? "text-white" : ""
+                      }`}
+                    >
+                      Roles
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       href="/admin/category"
                       className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-color-dark2 duration-300 ease-in-out hover:text-white ${
                         selected?.includes("category") ? "text-white" : ""

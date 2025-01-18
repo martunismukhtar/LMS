@@ -40,7 +40,7 @@ export async function create(state: unknown, formData: FormData) {
         };
       }
       return {
-        message: "Category updated successfully",
+        message: "Category added successfully",
         status: "success",
       };
   }
@@ -64,7 +64,7 @@ export async function edit(state: unknown, formData: FormData) {
     description: formData.get("description")
   });
   if (!validatedData.success) {
-    console.log(validatedData.error.errors[0].message);
+
     return {
       message: String(validatedData.error.errors[0].message),
       status: "error",

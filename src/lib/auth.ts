@@ -34,29 +34,29 @@ export const authOptions: NextAuthOptions = {
                 if (!isValidPassword) {
                     throw new Error('Invalid email or password');
                 }
-                // const token = jwt.sign(
-                //     { id: user.id, email: user.email }, 
-                //     process.env.SECRET_KEY as string, 
-                //     { expiresIn: '1h' }
-                // );
+                
                 const user_role = await prisma.userRole.findFirst({
                     where: {
                         user_id: user.id,
                     },
                 })
-                const roles = await prisma.roles.findFirst({
-                    select: {
-                      id: true,
-                      name: true 
-                    },
-                    where: {
-                        id: user_role?.role_id,
-                    },
-                })
-                // const refreshToken = jwt.sign({ 
-                //     id: user.id, email: user.email 
-                //   }, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '7d' });
-
+                let roles;
+                if(user_role) {
+                    roles = await prisma.roles.findUnique({
+                        select: {
+                          id: true,
+                          name: true 
+                        },
+                        where: {
+                            id: user_role?.role_id,
+                        },
+                    })
+                } else {
+                    roles = {
+                        name: 'user'
+                    }
+                }
+               
                 const userAuth = {
                     id: user.id,
                     name: user.name,
@@ -92,8 +92,7 @@ export const authOptions: NextAuthOptions = {
         jwt({ token, user }) {
           if (!user) return token
             token.role = user.role;
-            // token.refreshToken = user.refreshToken;
-            // token.accessToken = user.accessToken;
+            token.id = user.id;
           return {
             ...token,
             id: user.id,
@@ -101,8 +100,7 @@ export const authOptions: NextAuthOptions = {
         },
         session({ session, token }) {
             session.role = token.role as string;
-            // session.accessToken = token.accessToken as string;
-            // session.refreshToken = token.refreshToken as string;
+            session.id = token.userId as string;
           return {
             ...session,
             id: token.id,

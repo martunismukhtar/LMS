@@ -116,21 +116,25 @@ const CoursePage = () => {
         </Link>
       </div>
       <div className={`mt-6 bg-white p-4 rounded-md ${loading ? "" : "flex"} gap-4 flex-wrap`}>
-        {!loading ? (
+        {loading && <ShimmerLoading />}
+        {!loading && data.length === 0 && <div className="w-full flex justify-center"><p>No data found</p></div>}
+        {!loading && data.length > 0 &&
           data.map((item) => (
             <div
               key={item.id}
-              className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative flex flex-col"
+              className="max-w-sm px-6 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
             >
-              <span onClick={() => handleDelete(item.id)} className="absolute top-3 right-2.5 text-2xl font-medium text-red-400">
-                x
-              </span>
+              <div className="flex justify-end">
+                <span onClick={() => handleDelete(item.id)} className="cursor-pointer btn-del-{item.id} text-2xl font-medium text-red-400">
+                  x
+                </span>
+              </div>              
               <a href="#">
                 <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                   {item.title}
                 </h5>
               </a>
-              <div className="flex-grow relative">
+              <div className="flex-grow">
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                   {item.description}
                 </p>                
@@ -165,9 +169,7 @@ const CoursePage = () => {
               </div>
             </div>
           ))
-        ) : (
-          <ShimmerLoading />
-        )}
+        }
 
         <Swal
           visible={show}

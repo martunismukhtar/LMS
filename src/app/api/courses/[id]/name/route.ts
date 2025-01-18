@@ -16,7 +16,7 @@ export async function GET(
   try {
     
     const course = await prisma.courses.findUnique({
-        where: { id: Number(id) },
+        where: { id: id },
     });
 
     if (!course) {

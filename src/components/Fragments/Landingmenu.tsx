@@ -2,14 +2,12 @@
 
 import Button from "../Elements/button";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Landingmenu = () => {
   const pathname = usePathname();
 
-  const handleClickRegister = () => {
-    
-  };
   return (
     <>
       <ul className="list-none flex gap-8 items-center">
@@ -25,13 +23,12 @@ const Landingmenu = () => {
           </li>
         )}
         <li>
-          <Button
-            type="button"
-            onClick={handleClickRegister}
+          <Link
+            href="register"            
             className="bg-transparent py-[16px] px-[20px] text-black rounded-full "
           >
             Sign up
-          </Button>
+          </Link>
         </li>
       </ul>
     </>

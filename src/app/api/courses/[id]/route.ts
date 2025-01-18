@@ -24,7 +24,7 @@ export async function GET(
       category_id: true
     },
     where: {
-      id: Number(id),
+      id: id,
     },
   });
   return NextResponse.json(courses);
@@ -43,7 +43,7 @@ export async function PUT(
   const { title, description, status, price, duration, category_id } = await request.json();
 
   const course = await prisma.courses.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
 
   if (!course) {
@@ -52,14 +52,14 @@ export async function PUT(
 
   try {
     await prisma.courses.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         title,
         description,
         status,
         price: Number(price),
         duration: Number(duration),
-        category_id: Number(category_id)
+        category_id: category_id
       },
     });
   } catch (error) {
@@ -86,7 +86,7 @@ export async function DELETE(
   }
 
   const course = await prisma.courses.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
 
   if (!course) {
@@ -95,7 +95,7 @@ export async function DELETE(
 
   try {
     await prisma.courses.delete({
-      where: { id: Number(id) },
+      where: { id: id },
     });
   } catch (error) {
     console.error("Error deleting course:", error);

@@ -59,10 +59,11 @@ const AddCategory = () => {
             required
           />
           <div className="flex justify-end">
+            <Button type="button" onClick={() => window.history.back()} className="btn-dark mr-2">Back</Button>
             {isPending ? (
               <LoadingButton />
             ) : (
-              <Button type="submit">Submit</Button>
+              <Button className="btn-default" type="submit">Submit</Button>
             )}
           </div>
         </form>

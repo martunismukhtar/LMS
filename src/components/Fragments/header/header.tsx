@@ -9,12 +9,12 @@ export default function Header() {
   
   return (
     <div className="w-full flex justify-center border-b">
-      <div className="w-full sm:w-4/5 px-10 py-4 flex justify-between">
+      <div className="w-full sm:w-4/5 px-10 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center">
-          <Image src="/logo.png" alt="logo"
+          <Image src="/logo-1.png" alt="logo"
             className="object-contain"
-            width={110}
-            height={110}
+            width={180}
+            height={90}
             />
         </Link>
         
@@ -24,7 +24,7 @@ export default function Header() {
         {/* hamburger */}
         <div className="sm:hidden flex items-center">
             <HamburgerButton />
-        </div>
+        </div>        
       </div>
     </div>
   );

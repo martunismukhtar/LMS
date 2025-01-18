@@ -36,7 +36,7 @@ const Table:React.FC<Props> = ({header, data, buttonConfig}) => {
   // }, [data, header]);
   
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto">      
       <table className="w-full table-auto min-w-max text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -53,6 +53,7 @@ const Table:React.FC<Props> = ({header, data, buttonConfig}) => {
           </tr>            
         </thead>
         <tbody>
+          {data.length === 0 && <tr><td className="text-center px-6 py-4" colSpan={header.length}>no record found</td></tr>}
           {data.map((item, index) => (
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
               {header.map((field, idx) => (
@@ -92,7 +93,7 @@ const Table:React.FC<Props> = ({header, data, buttonConfig}) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table>    
     </div>
   );
 };

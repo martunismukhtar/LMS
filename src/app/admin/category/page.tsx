@@ -15,13 +15,18 @@ interface Category {
 
 const CategoryPage = () => {  
   const [data, setData] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [show, setShow] = useState(false);
   const [header] = useState<string[]>(["id", "name", "description"]);
   useEffect(() => {
+    setIsLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/categories` as string)
       .then((res) => res.json())
-      .then((data: Category[]) => setData(data || []))
+      .then((data: Category[]) => {
+        setData(data || []);
+        setIsLoading(false);
+      })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
@@ -67,12 +72,12 @@ const CategoryPage = () => {
       label: "Edit",
       href: "/admin/category",
       onClick: () => {},
-      className: "bg-yellow-500 text-white hover:text-white",
+      className: "btn-yellow",
     },
     {
       label: "Delete",
       onClick: (id: string) => handleDelete(id),
-      className: "bg-red-500 text-white hover:text-white",
+      className: "btn-red",
     },
   ];
 
@@ -95,7 +100,7 @@ const CategoryPage = () => {
         </Link>
       </div>
       <div className="mt-6 bg-white p-4 rounded-md">
-      {data.length > 0 ? <Table header={header} data={tableData} buttonConfig={buttonConfig} /> : <ShimmerLoading />} 
+      {!isLoading ? <Table header={header} data={tableData} buttonConfig={buttonConfig} /> : <ShimmerLoading />} 
         <Swal
           visible={show}
           onConfirm={handleConfirm}

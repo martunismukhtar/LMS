@@ -5,29 +5,17 @@ import LoadingButton from "@/components/Elements/loading/LoadingButton";
 import Link from "next/link";
 import Layout from "../layouts/landing";
 import InputForm from "@/components/Elements/input/Index";
-import { useActionState, useEffect, useState } from "react";
-import { create } from "@/actions/RegisterAction";
-import { returnMessageState } from "@/Jotai/atom";
-import { useAtom } from "jotai";
+import { useActionState, useState } from "react";
+import { create } from "@/actions/register/RegisterAction";
 
 const Register = () => {
-  const [state, actionForm, loading] = useActionState(create, null);
-  const [, setReturnMessage] = useAtom(returnMessageState);
+  const [state, actionForm, loading] = useActionState(create, null);  
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  useEffect(() => {
-    if (state?.status === "error" || state?.status === "success") {
-      setReturnMessage({
-        message: String(state?.message) || "",
-        visible: true,
-        type: state?.status || undefined,
-      });
-    }
-  }, [state, setReturnMessage]);
   return (
     <Layout>
       <div className="w-full flex justify-center p-6">
@@ -59,6 +47,9 @@ const Register = () => {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
+          <div className="text-red-500">
+            {state?.status === "error" && state?.message}
+          </div>
           <div className="flex justify-end">
             {loading ? (
               <LoadingButton />

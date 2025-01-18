@@ -29,40 +29,7 @@ export async function GET() {
   return NextResponse.json(serializedData);
 }
 
-// export async function GetById(id: string) {
-//   const course = await prisma.courses.findUnique({
-//     where: { id: Number(id) },
-//     select: {
-//       id: true,
-//       title: true,
-//       description: true,
-//       status: true,
-//       price: true,
-//       duration: true
-//     }
-//   });
-
-//   return NextResponse.json(course);
-// }
-
-  // const { id, title, description, status, price, duration } = await req.json();
-
-  // if (!id || !title || !description || !status || !price || !duration) {
-  //   return NextResponse.json({ error: 'data tidak boleh kosong' }, { status: 400 });
-  // }
-
-  // const updatedCourse = await prisma.courses.update({
-  //   where: { id: Number(id) },
-  //   data: { title, description, status, price, duration },
-  // });  
-
-  // return NextResponse.json({
-  //   message: 'Course updated successfully',
-  //   course: updatedCourse
-  // })
-// }
-
-// Handle POST request: Add a new user
+// Handle POST request: Add a new data
 export async function POST(req: Request) {
   const { title, description, status, price, duration, category_id } = await req.json();
  try {
@@ -73,7 +40,7 @@ export async function POST(req: Request) {
         status, 
         price: Number(price), 
         duration:Number(duration), 
-        category_id: Number(category_id)
+        category_id: category_id
       },
     });
     return NextResponse.json(newCourse);

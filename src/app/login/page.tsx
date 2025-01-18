@@ -8,7 +8,9 @@ import Button from "@/components/Elements/button";
 import LoadingButton from "@/components/Elements/loading/LoadingButton";
 import InputForm from "@/components/Elements/input/Index";
 
+
 const Login = () => {
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -25,11 +27,17 @@ const Login = () => {
       email,
       password,
       redirect: false,
+    }).catch((err) => {
+      return err;
     });
+    
     if(res?.status==200) {
         setLoading(false);
         window.location.href = "/";
-    }    
+    } else {
+      setError('Invalid email or password');
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,6 +62,9 @@ const Login = () => {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
+          <div className="text-red-500">
+            {error && error}
+          </div>
           <div className="flex justify-end">
             {loading ? <LoadingButton /> : <Button className="btn-default" type="submit">Login</Button> }            
           </div>          

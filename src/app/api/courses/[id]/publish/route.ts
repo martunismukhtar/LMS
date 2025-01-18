@@ -17,7 +17,7 @@ export async function POST(
   try {
     
     const course = await prisma.courses.findUnique({
-        where: { id: Number(id) },
+        where: { id: id },
     });
 
     if (!course) {
@@ -25,7 +25,7 @@ export async function POST(
     }
     const editStatus = status === "publish" ? "draft" : "publish";
     await prisma.courses.update({
-      where: { id: Number(id) },
+      where: { id: id },
       data: {
         status: editStatus,
       },

@@ -1,8 +1,10 @@
+import AdminLayout from "../layouts/admin"
+
 const AdminPage = () => {
     return (
-        <div>
-            <h1>Admin Page</h1>
-        </div>
+        <AdminLayout>
+            dashboard
+      </AdminLayout>
     )
 }
 export default AdminPage

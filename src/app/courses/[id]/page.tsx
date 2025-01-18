@@ -1,16 +1,17 @@
 "use client";
 
-import Button from "@/app/components/Elements/button";
-import InputForm from "@/app/components/Elements/input/Index";
-import LoadingButton from "@/app/components/Elements/loading/LoadingButton";
-import SelectForm from "@/app/components/Elements/SelectField/Index";
 import Layout from "@/app/layouts/landing";
 import { useParams } from "next/navigation";
 import React, { useActionState, useEffect, useState } from "react";
-import { edit } from "@/app/actions/course/CourseAction";
-import { returnMessageState } from "@/app/Jotai/atom";
+
 import { useAtom } from "jotai";
-import ToastElement from "@/app/components/Fragments/toast";
+import { edit } from "@/actions/course/CourseAction";
+import { returnMessageState } from "@/Jotai/atom";
+import InputForm from "@/components/Elements/input/Index";
+import SelectForm from "@/components/Elements/SelectField/Index";
+import LoadingButton from "@/components/Elements/loading/LoadingButton";
+import Button from "@/components/Elements/button";
+import ToastElement from "@/components/Fragments/toast";
 
 interface Props {
   title: string;
@@ -45,8 +46,6 @@ const EditCourse = () => {
   useEffect(() => {
     
     if (state?.status === "error" || state?.status === "success") {
-      // console.log(state?.status);
-      // console.log(state?.message);
       setReturnMessage({
         message: String(state?.message) || "",
         visible: true,
