@@ -33,6 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     "next-env.d.ts",
+    "global.d.ts",
     "lib/next-auth.d.ts",
     ".next/types/**/*.ts"
   ],

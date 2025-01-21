@@ -1,5 +1,8 @@
+'use client';
+
 import Button from "@/components/Elements/button";
 import { useCart } from "@/context/CartContext";
+// import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,13 +23,6 @@ interface ActiveData {
   title: string;
   price: string;
   description?: string;
-}
-
-interface CartItem {
-  id: string;
-  course_id: string;
-  price: number;
-  quantity: number;
 }
 
 const TabCourse = () => {
@@ -76,18 +72,18 @@ const TabCourse = () => {
   };
 
   const handleRedirect = () => {};
-  const handleCart = (course:ActiveData) => {  
+  const handleCart = async (course:ActiveData) => {  
     if(!session?.user){
       router.push('/login')      
     }
     addToCart({
       id: '',
       course_id: course.id,
-      price: Number(course.price),
+      price: course.price,
       quantity: 1,
       course:{
         title: course.title,
-        description: course.description
+        description: course.description??""
       }
     })
     

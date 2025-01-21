@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       user_id: z.string(),
       cartItems: z.array(
         z.object({
-          price: z.number(),
+          price: z.string(),
           quantity: z.number(),
           course_id: z.string(),
         })
@@ -51,14 +51,13 @@ export async function POST(req: Request) {
     const parsed = schema.safeParse({
       user_id,
       cartItems,
-    });
-    console.log(parsed.success);
+    });    
     if (!parsed.success) {
       console.log(parsed.error.errors[0].message);
       return NextResponse.json({
         status: "error",
         message: parsed.error.errors[0].message,
-      })
+      }, { status: 400 });
 
     }
 
@@ -80,8 +79,8 @@ export async function POST(req: Request) {
               }) => ({
                 id: uuidv4(),
                 course_id: item.course_id,
-                quantity: item.quantity,
-                price: item.price,
+                quantity: Number(item.quantity),
+                price: Number(item.price),
               })
             ),
           },
@@ -106,8 +105,8 @@ export async function POST(req: Request) {
               }) => ({
                 id: uuidv4(),
                 course_id: item.course_id,
-                quantity: item.quantity,
-                price: item.price,
+                quantity: Number(item.quantity),
+                price: Number(item.price),
               })
             ),
           },

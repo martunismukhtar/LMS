@@ -59,8 +59,7 @@ const Courses = () => {
         }
       )
         .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           btnDel.innerHTML = "Delete";
           setData((prevData) =>
             prevData.filter((item) => item.id !== selectedId)

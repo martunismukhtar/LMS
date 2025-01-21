@@ -14,7 +14,7 @@ export default function Home() {
     if (session?.role === "admin") {
       router.push("/admin");
     }
-  }, [session, router]); // Dependency array untuk memastikan efek hanya berjalan saat session atau router berubah
+  }, [session, router]); 
 
   return (
     <Layout>

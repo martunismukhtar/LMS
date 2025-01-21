@@ -39,7 +39,7 @@ export async function create(state:unknown, formData: FormData) {
             }
           ).catch((error) => {
               return error.message
-          });          
+          });             
           if(res.status === 409) {
             return {
               message: "Email already exists",

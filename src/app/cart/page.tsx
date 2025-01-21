@@ -3,24 +3,72 @@
 import Image from "next/image";
 import Layout from "../layouts/landing";
 import { useCart } from "@/context/CartContext";
-// import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const CartPage = () => {
-    const { cart, updateQuantity } = useCart();
-    // const [qty, setQty] = useState({});
+    const { cart, updateQuantity, removeFromCart } = useCart();
+    const { data: session } = useSession();
 
-    const handleQtyChange = (id:string, value:string) => {
+    useEffect(() => {
+        const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
+        const clientKey = process.env.MID_CLIENT_KEY;
+        const script = document.createElement("script");
+        script.src = snapScript;
+        script.async = true;
+        script.defer = true;
+        script.setAttribute("data-client-key", clientKey || "");
+        document.body.appendChild(script);
+        return () => {
+          document.body.removeChild(script);
+        };
+      }, []);
 
-        const newqty = cart.filter((item) => {
-            return item.id === id
-        })
-        console.log(value)
-        console.log(newqty)
-        // setQty((prevQty) => ({
-        //     ...prevQty,
-        //     [id]: value,
-        // }));
-    };
+      const handleCheckout = async () => {
+
+        try {
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/order`,
+            {
+              user_id: session?.id,
+              first_name: session?.user?.name,
+              last_name: session?.user?.name,
+              email: session?.user?.email,
+              cartItems: cart,
+
+            }
+          );
+         
+          const token = response.data.data;
+          (window.snap as { pay: (token: string) => void }).pay(token);
+
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            console.log(error);
+            console.error("Error saving order:", error.response?.data.message);
+          } else {
+            console.error("Unknown error:", error);
+          }
+        
+        }
+        //create order
+        // console.log(cart);
+
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tokenizer` as string, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     order_id: "12345",
+        //     gross_amount: 10000,
+        //   }),
+        // });
+        //   const token = await response.json();
+        //   (window.snap as { pay: (token: string) => void }).pay(token);
+        //   // window.snap.pay(token);        
+      }
   return (
     <Layout>
       <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -28,7 +76,7 @@ const CartPage = () => {
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
             Shopping Cart
           </h2>
-
+          <button className="btn-dark mt-3" onClick={() => window.history.back()}>back</button>
           <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
               <div className="space-y-6">
@@ -50,7 +98,10 @@ const CartPage = () => {
                       <div className="flex items-center justify-between md:order-3 md:justify-end">
                         <div className="flex items-center">
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => {
+                              if (item.quantity > 1)
+                                updateQuantity(item.id, item.quantity - 1)}
+                            }
                             type="button"
                             id="decrement-button"
                             data-input-counter-decrement="counter-input"
@@ -122,6 +173,7 @@ const CartPage = () => {
   
                         <div className="flex items-center gap-4">                         
                           <button
+                            onClick={() => removeFromCart(item.id)}
                             type="button"
                             className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
                           >
@@ -207,20 +259,20 @@ const CartPage = () => {
                   </dl>
                 </div>
 
-                <a
-                  href="#"
-                  className="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                <button
+                  onClick={handleCheckout}
+                  className="flex w-full items-center btn-default justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Proceed to Checkout
-                </a>
+                </button>
 
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                     {" "}
                     or{" "}
                   </span>
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => window.history.back()}
                     title=""
                     className="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500"
                   >
@@ -240,7 +292,7 @@ const CartPage = () => {
                         d="M19 12H5m14 0-4 4m4-4-4-4"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </div>
               </div>
 

@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 // Handle GET request: Fetch all users
 export async function GET() {
-  const courses = await prisma.categories.findMany({
+  const data = await prisma.categories.findMany({
     select: {
       id: true,
       name: true,
@@ -14,12 +14,7 @@ export async function GET() {
     }
   });
 
-  const serializedData = courses.map((item) => ({
-    ...item,
-    id: item.id?.toString(), // Pastikan hanya kolom BigInt yang dikonversi
-  }));
-
-  return NextResponse.json(serializedData);
+  return NextResponse.json(data);
 }
 
 
@@ -40,7 +35,10 @@ export async function POST(req: Request) {
   }
 
   const newCategory = await prisma.categories.create({
-    data: { name, description},
+    data: { 
+      name, 
+      description
+    },
   });
 
   if (!newCategory) {

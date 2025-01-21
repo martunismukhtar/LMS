@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       data: { 
         id:uuidv4(),
         title, 
-        course_id: Number(course_id)
+        course_id: course_id
       },
     });
     return NextResponse.json(newData);

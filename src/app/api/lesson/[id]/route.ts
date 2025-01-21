@@ -80,7 +80,7 @@ export async function DELETE(
   }
 
   const course = await prisma.courses.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
 
   if (!course) {
@@ -89,7 +89,7 @@ export async function DELETE(
 
   try {
     await prisma.courses.delete({
-      where: { id: Number(id) },
+      where: { id: id },
     });
   } catch (error) {
     console.error("Error deleting course:", error);

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   const { title, description, status, price, duration, category_id } = await req.json();
  try {
     const newCourse = await prisma.courses.create({
-      data: { 
+      data: {       
         title, 
         description, 
         status, 

@@ -5,16 +5,38 @@ import LoadingButton from "@/components/Elements/loading/LoadingButton";
 import Link from "next/link";
 import Layout from "../layouts/landing";
 import InputForm from "@/components/Elements/input/Index";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { create } from "@/actions/register/RegisterAction";
+import { returnMessageState } from "@/Jotai/atom";
+import { useAtom } from "jotai";
+import ToastElement from "@/components/Fragments/toast";
 
 const Register = () => {
-  const [state, actionForm, loading] = useActionState(create, null);  
+  const [state, actionForm, loading] = useActionState(create, null);
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [, setReturnMessage] = useAtom(returnMessageState);
+
+  useEffect(() => {
+    console.log(state);
+    if (state?.status === "error" || state?.status === "success") {      
+      setReturnMessage({
+        message: String(state?.message) || "",
+        visible: true,
+        type: state?.status || undefined,
+      });
+    }
+    if (state?.status === "success") {
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
+    }
+  }, [state, setReturnMessage]);
 
   return (
     <Layout>
@@ -65,8 +87,9 @@ const Register = () => {
               Login
             </Link>
           </p>
-        </form>
+        </form>        
       </div>
+      <ToastElement />
     </Layout>
   );
 };
