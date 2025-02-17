@@ -38,6 +38,7 @@ export async function POST(req: Request) {
         title, 
         description, 
         status, 
+        slug: title.replace(/\s+/g, '-').toLowerCase(),
         price: Number(price), 
         duration:Number(duration), 
         category_id: category_id
