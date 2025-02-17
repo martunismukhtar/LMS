@@ -19,16 +19,16 @@ const Logoutmenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <ul className="list-none flex items-center gap-4 ">
+      <ul className="list-none flex items-center gap-4 ">        
         {total > 0 && <li className="relative">
           <Link href="/cart" className="relative">
             <span className="absolute top-[-10px] right-[-9px] w-5 h-5 flex items-center justify-center bg-red-500 rounded-full text-white text-sm">
-              {total}
+              {total} 
             </span>
             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
           </Link>
         </li>}
-        {myclass && myclass > 0 && <li>
+        { myclass > 0 && <li>
           <Link href={`myclass`} className="text-sm hover:bg-slate-100 cursor-pointer hover:rounded-md px-2 py-3">my class</Link>
         </li>}
         

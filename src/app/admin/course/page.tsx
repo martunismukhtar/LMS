@@ -122,7 +122,7 @@ const CoursePage = () => {
           data.map((item) => (
             <div
               key={item.id}
-              className="max-w-sm px-6 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
+              className="w-96 px-6 py-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col"
             >
               <div className="flex justify-end">
                 <span onClick={() => handleDelete(item.id)} className="cursor-pointer btn-del-{item.id} text-2xl font-medium text-red-400">

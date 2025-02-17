@@ -103,7 +103,7 @@ const CourseView = () => {
                     <div className="flex justify-end gap-3 mt-2">
                       <Link
                         className="btn-default mx-2"
-                        href={`/play/course/${item.course.id}/modules`}
+                        href={`courses/${item.course.id}/learn`}
                       >
                         Learn
                       </Link>

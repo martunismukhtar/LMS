@@ -17,14 +17,15 @@ model User {
   role          UserRole[]
   subscriptions Subscriptions[]
   progress      LessonProgress[]
-  usercourse UserCourse[]
-  cart Cart[]
-  order Order[]
+  usercourse    UserCourse[]
+  cart          Cart[]
+  order         Order[]
+
   @@map("users")
 }
 
 model Categories {
-  id            String          @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   description String
   courses     Courses[]
@@ -36,30 +37,33 @@ model Categories {
 
 model Courses {
   id            String          @id @default(uuid())
+  slug          String          @unique
   title         String
   description   String
   status        CourseStatus    @default(draft)
   price         Decimal         @default(0) @db.Decimal(10, 2)
   duration      Int
   category_id   String
+  course_type   CourseType      @default(FREE)
   category      Categories      @relation(fields: [category_id], references: [id])
   module        Modules[]
   subscriptions Subscriptions[]
-  usercourse UserCourse[]
-  CartItem CartItem[]
-  OrderItems OrderItems[]
-  createdAt     DateTime        @default(now()) // Gunakan @default untuk createdAt
-  updatedAt     DateTime?       @updatedAt // Gunakan @updatedAt untuk updatedAt
+  usercourse    UserCourse[]
+  CartItem      CartItem[]
+  OrderItems    OrderItems[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
 
   @@map("courses")
 }
 
 model UserCourse {
-  id String @id @default(uuid())
+  id        String  @id @default(uuid())
   course_id String
-  course    Courses   @relation(fields: [course_id], references: [id])
-  user_id String
-  user User  @relation(fields: [user_id], references: [id])
+  course    Courses @relation(fields: [course_id], references: [id])
+  user_id   String
+  user      User    @relation(fields: [user_id], references: [id])
+
   @@map("user_course")
 }
 
@@ -106,14 +110,14 @@ model Subscriptions {
 }
 
 model LessonProgress {
-  id          String    @id @default(cuid())
-  user_id     String
-  user        User      @relation(fields: [user_id], references: [id])
-  lesson_id   String
-  lesson      Lessons   @relation(fields: [lesson_id], references: [id])
-  completed   Boolean   @default(false)
+  id           String    @id @default(cuid())
+  user_id      String
+  user         User      @relation(fields: [user_id], references: [id])
+  lesson_id    String
+  lesson       Lessons   @relation(fields: [lesson_id], references: [id])
+  completed    Boolean   @default(false)
   completed_at DateTime?
-  createdAt   DateTime  @default(now())
+  createdAt    DateTime  @default(now())
 
   @@map("lesson_progress")
 }
@@ -128,7 +132,7 @@ model Roles {
 }
 
 model UserRole {
-  id          String    @id @default(cuid())
+  id      String @id @default(cuid())
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
   role    Roles  @relation(fields: [role_id], references: [id])
@@ -138,56 +142,57 @@ model UserRole {
 }
 
 model Cart {
-  id          String    @id @default(cuid())
-  status CartStatus @default(ACTIVE)
-  user_id String
-  user User @relation(fields: [user_id], references: [id])
-  cartitem CartItem[]
-  created_at   DateTime         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at   DateTime?        @updatedAt
+  id         String     @id @default(cuid())
+  status     CartStatus @default(ACTIVE)
+  user_id    String
+  user       User       @relation(fields: [user_id], references: [id])
+  cartitem   CartItem[]
+  created_at DateTime   @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at DateTime?  @updatedAt
 
   @@map("cart")
 }
 
 model CartItem {
-  id          String    @id @default(cuid())
-  cart_id String
-  cart Cart @relation(fields: [cart_id], references: [id])
-  course_id String
-  course Courses @relation(fields: [course_id], references: [id])
-  quantity Int @default(1)
-  price         Decimal         @default(0) @db.Decimal(10, 2)
-  created_at   DateTime         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at   DateTime?        @updatedAt
+  id         String    @id @default(cuid())
+  cart_id    String
+  cart       Cart      @relation(fields: [cart_id], references: [id])
+  course_id  String
+  course     Courses   @relation(fields: [course_id], references: [id])
+  quantity   Int       @default(1)
+  price      Decimal   @default(0) @db.Decimal(10, 2)
+  created_at DateTime  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at DateTime? @updatedAt
 
   @@map("cart_item")
 }
 
 model Order {
-  id          String    @id @default(cuid())
-  user_id String
-  user User @relation(fields: [user_id], references: [id])
-  order_date DateTime @default(dbgenerated("CURRENT_TIMESTAMP"))
-  status OrderStatus @default(PENDING)
-  total_amount Decimal @default(0) @db.Decimal(10,2)
-  created_at   DateTime         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at   DateTime?        @updatedAt 
-  orderitem OrderItems[]
+  id           String       @id @default(cuid())
+  user_id      String
+  user         User         @relation(fields: [user_id], references: [id])
+  order_date   DateTime     @default(dbgenerated("CURRENT_TIMESTAMP"))
+  status       OrderStatus  @default(PENDING)
+  total_amount Decimal      @default(0) @db.Decimal(10, 2)
+  created_at   DateTime     @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at   DateTime?    @updatedAt
+  orderitem    OrderItems[]
+
   @@map("order")
 }
 
 model OrderItems {
-  id String    @id @default(cuid())
-  order_id String
-  order Order @relation(fields: [order_id], references: [id])
-  course_id String
-  course Courses @relation(fields: [course_id], references: [id])
-  quantity Int
-  unit_price Decimal @default(0) @db.Decimal(10,2)
-  total_price  Decimal @default(0) @db.Decimal(10,2)
+  id          String  @id @default(cuid())
+  order_id    String
+  order       Order   @relation(fields: [order_id], references: [id])
+  course_id   String
+  course      Courses @relation(fields: [course_id], references: [id])
+  quantity    Int
+  unit_price  Decimal @default(0) @db.Decimal(10, 2)
+  total_price Decimal @default(0) @db.Decimal(10, 2)
 
-  created_at   DateTime         @default(dbgenerated("CURRENT_TIMESTAMP"))
-  updated_at   DateTime?        @updatedAt 
+  created_at DateTime  @default(dbgenerated("CURRENT_TIMESTAMP"))
+  updated_at DateTime? @updatedAt
 
   @@map("order_item")
 }
@@ -204,6 +209,11 @@ enum OrderStatus {
   PENDING
   COMPLETED
   CANCELED
+}
+
+enum CourseType {
+  FREE
+  PAID
 }
 
 enum CourseStatus {

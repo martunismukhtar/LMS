@@ -41,7 +41,7 @@ const Register = () => {
   return (
     <Layout>
       <div className="w-full flex justify-center p-6">
-        <form action={actionForm} className="flex flex-col p-16 border-2">
+        <form action={actionForm} className="flex flex-col p-16 border-2 rounded-md">
           <InputForm
             label="Name"
             name="name"

@@ -43,7 +43,7 @@ const Login = () => {
   return (
     <Layout>
       <div className="w-full flex justify-center p-6">
-        <form onSubmit={handleLogin} className="flex flex-col p-16 border-2">
+        <form onSubmit={handleLogin} className="flex flex-col p-16 border-2 rounded-md">
           <InputForm
             label="Email"
             name="email"

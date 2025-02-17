@@ -43,7 +43,7 @@ const TabCourse = () => {
     )
       .then((res) => res.json())
       .then((data: CatCourse[]) => {
-        if (data?.length > 0) {
+        if (data?.length > 0) {          
           setCourses(data);
           setActiveTab(data[0].name);
           setActiveData(data[0].courses);

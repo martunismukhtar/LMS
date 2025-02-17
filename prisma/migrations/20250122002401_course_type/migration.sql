@@ -1,0 +1,21 @@
+-- CreateEnum
+CREATE TYPE "CourseType" AS ENUM ('FREE', 'PAID');
+
+-- AlterTable
+ALTER TABLE "cart" ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "cart_item" ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "courses" ADD COLUMN     "course_type" "CourseType" NOT NULL DEFAULT 'FREE';
+
+-- AlterTable
+ALTER TABLE "lessons" ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "order" ALTER COLUMN "order_date" SET DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "order_item" ALTER COLUMN "created_at" SET DEFAULT CURRENT_TIMESTAMP;
